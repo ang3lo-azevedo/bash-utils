@@ -36,7 +36,10 @@ command_exists() {
 install_package() {
     if ! command_exists "$1"; then
         print_status "Installing $1..."
-        sudo pacman -S --noconfirm "$1"
+        while ! sudo pacman -S --noconfirm "$1"; do
+            print_error "Failed to install $1. Updating system and retrying..."
+            sudo pacman -Sy
+        done
     else
         print_status "$1 is already installed"
     fi
@@ -46,7 +49,10 @@ install_package() {
 install_aur_package() {
     if ! command_exists "$1"; then
         print_status "Installing $1 from AUR..."
-        yay -S --noconfirm "$1"
+        while ! yay -S --noconfirm "$1"; do
+            print_error "Failed to install $1. Updating system and retrying..."
+            sudo pacman -Sy
+        done
     else
         print_status "$1 is already installed"
     fi

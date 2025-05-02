@@ -36,7 +36,7 @@ command_exists() {
 install_package() {
     if ! command_exists "$1"; then
         print_status "Installing $1..."
-        sudo pacman -S --noconfirm "$1"
+        sudo pacman -S --needed--noconfirm "$1"
     else
         print_status "$1 is already installed"
     fi
